@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <div class="calc-card">
+    <h1>Calculadora</h1>
+
+    <div class="fila">
+      <div class="campo">
+        <label for="num1">Núm. 1</label>
+        <input type="number" id="num1" placeholder="0">
+      </div>
+      <div class="campo op">
+        <label for="operacion">Oper.</label>
+        <select id="operacion">
+          <option value="+">+</option>
+          <option value="-">−</option>
+          <option value="*">×</option>
+          <option value="/">÷</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="num2">Núm. 2</label>
+        <input type="number" id="num2" placeholder="0">
+      </div>
+      <div class="campo resultado-campo">
+        <label>Resultado</label>
+        <div class="resultado-caja" id="resultado">-</div>
+      </div>
+    </div>
+
+    <button id="btnCalcular">Resultado</button>
+
+    <div class="procedimiento-box" id="cajaProcedimiento">
+      <span class="placeholder-txt" id="procedimiento">Ingresa los números y presiona "Resultado"</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

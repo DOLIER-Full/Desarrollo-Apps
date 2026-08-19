@@ -1,5 +1,5 @@
-<h1 align="center">Hola, soy Dolier 👋</h1>
-<h3 align="center">Estudiante de Desarrollo de Apps | Aprendiendo a construir cosas que funcionan</h3>
+<h1 align="center">Hola, soy MRX 👋</h1>
+<h3 align="center">Estudiante de Desarrollo de Apps | Proceso de Aprendizaje </h3>
 
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1000&color=2EA043&center=true&vCenter=true&width=440&lines=Front-End+en+construcci%C3%B3n;HTML+%2B+CSS+%2B+JavaScript;Explorando+TypeScript" alt="Typing SVG" />
@@ -33,16 +33,7 @@
 
 | Proyecto | Descripción | Tecnologías |
 |---|---|---|
-| [**Desarrollo-Apps**](https://github.com/DOLIER-Full/Desarrollo-Apps) | Calculadora web interactiva construida desde cero | `HTML` `CSS` `JavaScript` `TypeScript` |
-
----
-
-### 📊 Estadísticas
-
-<p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=DOLIER-Full&show_icons=true&theme=github_dark&hide_border=true" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=DOLIER-Full&layout=compact&theme=github_dark&hide_border=true" />
-</p>
+| [**Desarrollo-Apps**](https://github.com/DOLIER-Full/Desarrollo-Apps) | Creación de Aplicativos Web | `HTML` `CSS` `JavaScript` `TypeScript` |
 
 ---
 

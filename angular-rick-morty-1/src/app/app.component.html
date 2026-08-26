@@ -1,0 +1,160 @@
+<main class="app-shell">
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="brand-row">
+        <span class="live-dot"></span>
+        <span class="live-label">API EN VIVO</span>
+        <span class="tech-badge">Angular 20</span>
+      </div>
+      <p class="eyebrow">HttpClient · rxResource · Signals · RxJS · Interceptor</p>
+      <h1>Rick & Morty <span>Episodes</span></h1>
+      <p class="subtitle">
+        Explora los episodios directamente desde la API, con actualización automática cada 60 segundos.
+      </p>
+    </div>
+
+    <div class="hero-status">
+      <div class="status-card">
+        <span class="status-title">Conexión</span>
+        <strong><span class="pulse-dot"></span> Online</strong>
+        <small>GET /api/episode</small>
+      </div>
+      <button class="refresh-button" type="button" (click)="refresh()" [disabled]="isLoading()" title="Actualizar ahora">
+        ↻ <span>{{ isLoading() ? 'Actualizando' : 'Actualizar' }}</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="control-panel" aria-label="Filtros de episodios">
+    <label class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        #searchInput
+        type="search"
+        placeholder="Buscar episodio, código o fecha..."
+        [value]="search()"
+        (input)="onSearch(searchInput.value)"
+      />
+    </label>
+
+    <div class="page-controls">
+      <button type="button" (click)="previousPage()" [disabled]="page() === 1 || isLoading()">←</button>
+      <span>Temporada / página <strong>{{ page() }}</strong> de <strong>{{ episodesResource.value()?.info?.pages ?? '...' }}</strong></span>
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="isLoading() || page() >= (episodesResource.value()?.info?.pages ?? page())"
+      >→</button>
+    </div>
+  </section>
+
+  @if (isLoading() && !episodesResource.value()) {
+    <section class="state-card" aria-live="polite">
+      <div class="spinner"></div>
+      <h2>Conectando con la API...</h2>
+      <p>Estamos cargando los episodios reales.</p>
+    </section>
+  } @else if (errorMessage()) {
+    <section class="state-card error" aria-live="assertive">
+      <h2>No se pudo conectar</h2>
+      <p>{{ errorMessage() }}</p>
+      <button class="primary-button" type="button" (click)="retry()">Reintentar</button>
+    </section>
+  } @else {
+    <section class="live-strip">
+      <div>
+        <strong>{{ filteredEpisodes().length }}</strong> episodios visibles
+        <span class="divider">•</span>
+        <strong>{{ episodesResource.value()?.info?.count ?? 0 }}</strong> episodios en la API
+      </div>
+      <div class="updated">
+        <span class="pulse-dot"></span>
+        Actualización automática cada 60 s
+        @if (lastUpdated()) {
+          <span>· última consulta {{ lastUpdated() | date:'HH:mm:ss' }}</span>
+        }
+      </div>
+    </section>
+
+    <section class="episode-grid">
+      @for (episode of filteredEpisodes(); track episode.id) {
+        <article class="episode-card">
+          <div class="poster-wrap">
+            <img
+              [src]="characterImage(episode)"
+              [alt]="'Personaje del episodio ' + episode.name"
+              loading="lazy"
+            />
+            <div class="poster-overlay"></div>
+            <span class="episode-pill">{{ episode.episode }}</span>
+            <button class="play-button" type="button" (click)="openEpisode(episode)" [attr.aria-label]="'Abrir ' + episode.name">
+              ▶
+            </button>
+          </div>
+
+          <div class="episode-body">
+            <div class="meta-line">
+              <span>{{ episode.episode }}</span>
+              <span>#{{ episode.id }}</span>
+            </div>
+            <h2>{{ episode.name }}</h2>
+            <p>{{ episode.air_date }}</p>
+
+            <div class="card-actions">
+              <button type="button" (click)="openEpisode(episode)">▶ Ver opciones</button>
+              <a [href]="episode.url" target="_blank" rel="noreferrer">API ↗</a>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <section class="state-card empty-state">
+          <h2>Sin coincidencias</h2>
+          <p>No hay episodios que coincidan con “{{ search() }}”.</p>
+        </section>
+      }
+    </section>
+  }
+
+  <footer class="footer">
+    <span>Angular standalone</span>
+    <span>·</span>
+    <span>HttpClient + Interceptor</span>
+    <span>·</span>
+    <span>rxResource + Signals + RxJS</span>
+    <span class="footer-note">La API entrega datos del episodio; no entrega video oficial.</span>
+  </footer>
+</main>
+
+@if (selectedEpisode(); as episode) {
+  <div class="modal-backdrop" role="presentation" (click)="closeEpisode()">
+    <section class="modal" role="dialog" aria-modal="true" [attr.aria-label]="episode.name" (click)="$event.stopPropagation()">
+      <button class="close-button" type="button" (click)="closeEpisode()" aria-label="Cerrar">×</button>
+
+      <div class="modal-poster">
+        <img [src]="characterImage(episode)" [alt]="episode.name" />
+        <div class="modal-gradient"></div>
+        <div class="modal-title">
+          <span>{{ episode.episode }}</span>
+          <h2>{{ episode.name }}</h2>
+          <p>{{ episode.air_date }}</p>
+        </div>
+      </div>
+
+      <div class="modal-content">
+        <div class="detail-chips">
+          <span>{{ episode.characters.length }} personajes</span>
+          <span>ID #{{ episode.id }}</span>
+        </div>
+
+        <p class="notice">
+          Esta API no proporciona el video del capítulo. El botón de reproducción abre una búsqueda del episodio en YouTube para que puedas elegir una fuente disponible.
+        </p>
+
+        <div class="modal-actions">
+          <a class="primary-button" [href]="youtubeSearchUrl(episode)" target="_blank" rel="noreferrer">▶ Buscar capítulo para ver</a>
+          <a class="secondary-button" [href]="episode.url" target="_blank" rel="noreferrer">Ver datos de la API</a>
+        </div>
+      </div>
+    </section>
+  </div>
+}
